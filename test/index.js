@@ -2,7 +2,7 @@ const tape = require('tape')
 const bent = require('bent')
 const getPort = require('get-port')
 
-const server = require('../')
+const server = require('./')
 
 const getJSON = bent('json')
 const getBuffer = bent('buffer')
@@ -13,6 +13,7 @@ const context = {}
 
 tape('setup', async function (t) {
 	const port = await getPort()
+	console.log(port);
 	context.server = server.listen(port)
 	context.origin = `http://localhost:${port}`
 
