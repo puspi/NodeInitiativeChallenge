@@ -4,28 +4,49 @@ const app = express()
 const PORT = 3000
 
 const request = require('request');
+const semver = require('semver');
 
-var pjson = require('./package.json');
-console.log(pjson.dependencies);
+const pjson = require('./package.json');
+
 
 app.listen(PORT, () => {
-    console.log("Server is listening on port:",`${PORT}`);
-  });
+  console.log("Server is listening on port:",`${PORT}`);
+});
+
+//Loads the handlebars module
+const handlebars = require('express-handlebars');
+//Sets our app to use the handlebars engine
+app.set('view engine', 'hbs');
+//Sets handlebars configurations
+app.engine('hbs', handlebars({
+  layoutsDir: __dirname + '/views',
+  //new configuration parameter
+  extname: 'hbs',
+  //new configuration parameter
+  defaultLayout: 'dependencies',
+  }));
 
 
-  app.get('/', (req, res) => {
-    res.send('Welcome to my page')
-  })
+app.get('/', (req, res) => {
+  res.render('Node.js Examples Initiative Challenge');
+});
 
-//get the package .json dependencies   use this json to show using hsndlebar hbs
+//add handle bars
+//add tests
+
+  //TODO : 
+  // write tests
+
+//get the package .json dependencies   use this json to show using handlebars
   app.get('/dependencies', (req, res) => {
-    console.log();
-    res.send(pjson.dependencies)
+   res.render('dependencies', {pjson});
   })
 
   
-  //minimum-secure   
-  //TODO : - compare versions using semver
+    
+ /* GET :/minimum-secure 
+ * if versions are same as previous then check highest version of each line which has security is true
+ */
   app.get('/minimum-secure', (req, res) => {
 
     request('https://nodejs.org/dist/index.json', function (error, response, body) {
@@ -33,45 +54,59 @@ app.listen(PORT, () => {
       
             var result = JSON.parse(body);
 
-            let minscore = {}; 
-            let i =0, count =0;
+            let minscore = {};
+            let versionMatch = false;
+  
             for(const val of result){
-                let version = val.version.split(".")[0];
+              if(val.security){
+                  let version = val.version.split(".")[0];
 
-              // TODO :  if versions are same as previous then check highest version of each line which has security is true
-               
-                if(val.security){
-                    console.log(version);
+                  if(minscore.hasOwnProperty(version)) {
+                      const valueObj = minscore[version];
+                      versionMatch = semver.gt(val.version,valueObj.version);
+
+                      if(versionMatch){
+                        minscore[version] = val;
+                      }
+                  } else {
                     minscore[version]= val;
-                    count++;
-                }
-                i++;
-            }
-            console.log(count);
+                  }
+              }
+          }
             res.send(minscore)
         }
     });
   })
 
 
-  //TODO :  get latest release version in each release V14 2.3.4 V14 1.2.3 pick 14 2.3.4
+  /*
+  * get latest release version in each release V14 2.3.4 V14 1.2.3 pick 14 2.3.4
+  */
   app.get('/latest-releases', (req, res) => {
 
     request('https://nodejs.org/dist/index.json', function (error, response, body) {
         if (!error && response.statusCode == 200) {
       
             var result = JSON.parse(body);
+            
+            let versionMatch = false;
+            let latestReleases = {}; 
 
-            let latest_releases = {}; 
-            let i =0; let count =0;
             for(const val of result){
-                let v = "v"+i;
-                if(val.security){
-                    latest_releases[v]= val;
+              let version = val.version.split(".")[0];
+
+              if(latestReleases.hasOwnProperty(version)) {
+                    const valueObj = latestReleases[version];
+                    versionMatch = semver.gt(val.version,valueObj.version);
+
+                    if(versionMatch){
+                      latestReleases[version]= val;
+                    }
+                } else {
+                  latestReleases[version]= val;
                 }
-                i++;
             }
-            res.send(latest_releases)
+            res.send(latestReleases)
         }
     });
   })

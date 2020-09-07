@@ -7,6 +7,8 @@ const server = require('./')
 const getJSON = bent('json')
 const getBuffer = bent('buffer')
 
+const nock = require('nock')
+
 // Use `nock` to prevent live calls to remote services
 
 const context = {}
@@ -20,8 +22,15 @@ tape('setup', async function (t) {
 	t.end()
 })
 
+
 tape('should get dependencies', async function (t) {
-	const html = (await getBuffer(`${context.origin}/dependencies`)).toString()
+
+	console.log(context.origin);
+	//const html = (await getBuffer(`${context.origin}/dependencies`)).toString()
+
+	const scope = nock('http://localhost:3000')
+	.get('/dependencies')
+	.reply(200, 'domain matched')
 
 	// assertions etc
 })
