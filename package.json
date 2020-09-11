@@ -7,7 +7,7 @@
 		"test": "test"
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "node test/index",
 		"start": "node index"
 	},
 	"repository": {
@@ -15,7 +15,7 @@
 		"url": "git+https://github.com/demola07/nodejs-examples-initiative-challenge.git"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Pushpita Shrestha",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/demola07/nodejs-examples-initiative-challenge/issues"
@@ -28,11 +28,7 @@
 		"get-port": "^5.1.1",
 		"hbs": "^4.1.1",
 		"nock": "^13.0.4",
-		"request": "^2.88.2",
 		"semver": "^7.3.2",
 		"tape": "^5.0.1"
-	},
-	"devDependencies": {
-		"faucet": "0.0.1"
 	}
 }
