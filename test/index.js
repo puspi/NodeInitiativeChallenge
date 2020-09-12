@@ -7,6 +7,7 @@ const server = require('../index')
 const response = require('./response')
 
 const getJSON = bent('json')
+const getBuffer = bent('buffer')
 
 const scope = nock(`https://nodejs.org`)	
 	.persist()
@@ -43,6 +44,16 @@ tape('test latest release', async(t) => {
 	   t.equal(v13max, 'v13.14.0', 'v13 should match')
 	   t.end()
 
+})
+
+tape('should get dependencies', async function (t) {
+	const html = (await getBuffer(`${context.origin}/dependencies`)).toString()
+	t.plan(3)
+	
+	t.true(html.indexOf('bent'), 'should contain bent')
+	t.true(html.indexOf('express'), 'should contain express')
+	t.true(html.indexOf('hbs'), 'should contain hbs')
+	t.end()
 })
 
 

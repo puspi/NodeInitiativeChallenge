@@ -10,7 +10,6 @@ const pjson = require('./package.json');
 
 const bent = require('bent')
 const getJSON = bent('json')
-const semverMaxSatisfying = require('semver/ranges/max-satisfying')
 
 app.listen(PORT, () => {
   console.log("Server is listening on port:",`${PORT}`);
@@ -30,15 +29,9 @@ app.engine('hbs', handlebars({
   }));
 
 
-app.get('/', (req, res) => {
-  res.render('Node.js Examples Initiative Challenge');
-});
-
-var d = 1;
 
 //get the package .json dependencies   use this json to show using handlebars
   app.get('/dependencies', (req, res) => {
-  // res.render('dependencies', {pjson});
    res.render("dependencies", { dependencies: pjson.dependencies });
   })
 

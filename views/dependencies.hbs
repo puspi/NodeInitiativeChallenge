@@ -2,14 +2,13 @@
  <html lang="en" dir="ltr">
    <head>
      <meta charset="utf-8">
-     <title>Nodejs Latest Versions</title>
+     <title>Nodejs Challenge - Solution</title>
    </head>
    <body>
-    <ul>
-      <li id="bent">bent -  {{dependencies.bent}}</li>
-      <li id="express">express - {{dependencies.express}}</li>
-      <li id="hbs">hbs - {{dependencies.hbs}}</li>
-      <li id="semver">semver - {{dependencies.semver}}</li>
-     </ul>
+      <ul>
+          {{#each dependencies}} 
+            <li>{{@key}} - {{this}} </li> 
+          {{/each}}
+      </ul>
    </body>
  </html>
